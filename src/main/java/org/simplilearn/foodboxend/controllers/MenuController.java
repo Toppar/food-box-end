@@ -10,45 +10,47 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.net.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import org.simplilearn.foodboxend.entities.Menu;
 
 @Component
 @RestController
 public class MenuController {
 
+	
 	@CrossOrigin(origins = "*")
 	@GetMapping("/get_menu")
-	public List<String> get_menu() throws URISyntaxException {
-		Connection conn = null;
-		List<String> menuList = new ArrayList<String>();
+	public List<Menu> get_menu() {
+		Connection c = null;
+		Statement stmt = null;
+		List<Menu> menuList = new ArrayList<Menu>();
+		
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/db_example?" + "user=root&password=F@!th973@");
-
-			Statement stmt = null;
-			ResultSet rs = null;
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM menu");
-			rs = stmt.getResultSet();
-
-			while (rs.next()) {
-				menuList.add(rs.getString("id"));
-				menuList.add(rs.getString("dish"));
-				menuList.add(rs.getString("cuisine"));
-				menuList.add(rs.getString("price"));
+			c = DriverManager.getConnection("jdbc:mysql://localhost/db_example?" + "user=root&password=F@!th973@");
+			stmt = c.createStatement();
+			String sql = "SELECT * FROM menu";
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				Menu newMenu = new Menu();
+				newMenu.setId(rs.getInt("id"));
+				newMenu.setDish(rs.getString("dish"));
+				newMenu.setCuisine(rs.getString("cuisine"));
+				newMenu.setPrice(rs.getInt("price"));
+				menuList.add(newMenu);
 				System.out.println(rs.getString("id"));
 				System.out.println(rs.getString("dish"));
 				System.out.println(rs.getString("cuisine"));
 				System.out.println(rs.getString("price"));
 			}
-
-		} catch (SQLException ex) {
-			System.out.println("Data not found!");
+			c.close();
+			return menuList;
 		}
-
-		return menuList;
+		catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			return null;
+		}
 	}
 
 	@CrossOrigin(origins = "*")

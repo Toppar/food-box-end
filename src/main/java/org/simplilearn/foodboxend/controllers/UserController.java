@@ -105,7 +105,6 @@ public class UserController {
 	@CrossOrigin(origins = "*")
 	@PostMapping("/add_user")
 	public boolean add_user(@RequestBody Map<String, Object> payload) {
-		String id = payload.get("id").toString();
 		String email = payload.get("email").toString();
 		String firstName = payload.get("first_name").toString();
 		String lastName = payload.get("last_name").toString();
@@ -117,7 +116,7 @@ public class UserController {
 		try {
 			c = DriverManager.getConnection("jdbc:mysql://localhost/db_example?" + "user=root&password=F@!th973@");
 			stmt = c.createStatement();
-			String sql = "INSERT INTO users (id, email, first_name, last_name, password) VALUES ('" + id + "', '"
+			String sql = "INSERT INTO users (email, first_name, last_name, password) VALUES ('"
 					+ email + "', '" + firstName + "', '" + lastName + "', '" + password + "');";
 			boolean status = stmt.execute(sql);
 			c.close();
