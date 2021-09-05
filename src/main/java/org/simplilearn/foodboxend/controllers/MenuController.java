@@ -128,7 +128,7 @@ public class MenuController {
 	@PostMapping("/change_price")
 	public boolean change_price(@RequestBody Map<String, Object> payload) {
 
-		String id = payload.get("id").toString();
+		String dish = payload.get("dish").toString();
 		String price = payload.get("price").toString();
 		Connection c = null;
 		Statement stmt = null;
@@ -136,7 +136,7 @@ public class MenuController {
 		try {
 			c = DriverManager.getConnection("jdbc:mysql://localhost/db_example?" + "user=root&password=F@!th973@");
 			stmt = c.createStatement();
-			String sql = "UPDATE menu SET price='" + price + "' WHERE id='" + id + "';";
+			String sql = "UPDATE menu SET price='" + price + "' WHERE dish='" + dish + "';";
 			boolean rs = stmt.execute(sql);
 			c.close();
 			return !rs;
@@ -150,7 +150,7 @@ public class MenuController {
 	@PostMapping("/change_dish")
 	public boolean change_dish(@RequestBody Map<String, Object> payload) {
 
-		String id = payload.get("id").toString();
+		String cuisine = payload.get("cuisine").toString();
 		String dish = payload.get("dish").toString();
 		Connection c = null;
 		Statement stmt = null;
@@ -158,7 +158,7 @@ public class MenuController {
 		try {
 			c = DriverManager.getConnection("jdbc:mysql://localhost/db_example?" + "user=root&password=F@!th973@");
 			stmt = c.createStatement();
-			String sql = "UPDATE menu SET dish='" + dish + "' WHERE id='" + id + "';";
+			String sql = "UPDATE menu SET dish='" + dish + "' WHERE cuisine='" + cuisine + "';";
 			boolean rs = stmt.execute(sql);
 			c.close();
 			return !rs;

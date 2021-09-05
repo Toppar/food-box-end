@@ -169,5 +169,30 @@ public class UserController {
 			return false;
 		}
 	}
+	
+	@CrossOrigin(origins = "*")
+	@PostMapping("/check_admin")
+	public boolean check_admin(@RequestBody Map<String, Object> payload) {
+		System.out.println(payload);
+		String email = payload.get("email").toString();
+		String password = payload.get("password").toString();
+
+		Connection c = null;
+		Statement stmt = null;
+
+		try {
+			c = DriverManager.getConnection("jdbc:mysql://localhost/db_example?" + "user=root&password=F@!th973@");
+			stmt = c.createStatement();
+			String sql = "SELECT (password) FROM admins WHERE email='" + email + "';";
+			ResultSet rs = stmt.executeQuery(sql);
+			rs.next();
+			String dbPass = rs.getString("password");
+			c.close();
+			return dbPass.equals(password);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			return false;
+		}
+	}
 
 }
